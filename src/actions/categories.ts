@@ -28,15 +28,11 @@ export const imageUploadHandler = async (formData: FormData) => {
   if (!formData) return
 
   const fileEntry = formData.get('file')
-  if (
-    !fileEntry ||
-    typeof fileEntry?.name !== 'string' ||
-    typeof fileEntry?.size !== 'number'
-  ) {
-    throw new Error('Expected a file')
-  }
 
-  const fileName = fileEntry?.name
+  if (!(fileEntry instanceof File)) throw new Error('Expected a file')
+
+  const fileName = fileEntry.name
+
   try {
     const { data, error } = await supabase.storage
       .from('app-images')
